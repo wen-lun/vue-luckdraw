@@ -1,6 +1,5 @@
 # 效果图
-<img src="demo/demo1.png" width="260"  />
-<img src="demo/demo2.gif" width="260"  />
+<img src="demo/demo1.png" width="260"  /><img src="demo/demo2.gif" width="260"  />
 
 > 说明：这是基于vue开发的转盘抽奖组件。
 
