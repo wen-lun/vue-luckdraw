@@ -4,6 +4,7 @@
   "description": "基于Vue的转盘抽奖组件",
   "author": "wenlun",
   "main": "lib/luckdraw.umd.min.js",
+  "typings": "types/index.d.ts",
   "files": [
     "packages",
     "lib"
