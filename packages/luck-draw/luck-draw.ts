@@ -8,6 +8,7 @@ import { Text } from 'konva/lib/shapes/Text';
 import { Stage } from 'konva/lib/Stage';
 import { Animation } from 'konva/lib/Animation';
 import { Tween } from 'konva/lib/Tween';
+import { Context } from 'konva/types/Context';
 
 const SPEED = 0.001;
 @Component({ name: 'LuckDraw' })
@@ -22,8 +23,8 @@ export default class extends Vue {
     @Prop({ type: Number, default: 16 }) fontSize!: number;
     @Prop({ type: Array, default: () => ['#FEE200', '#FFF'] }) dotColors!: Array<string>;
     @Prop({ type: Number, default: 24 }) dotCount!: number;
-    @Prop({ type: Number, default: 5 }) dotRadius!: number;
-    @Prop({ type: Array, default: () => ['#FFE62A', '#FECE00'] }) fanneColors!: Array<string>;
+    @Prop({ type: Number, default: 4 }) dotRadius!: number;
+    @Prop({ type: Array, default: () => ['#ffd428', '#fff68b'] }) fanneColors!: Array<string>;
 
     /* ============data=========== */
     @Ref('container') container!: HTMLDivElement;
@@ -32,6 +33,7 @@ export default class extends Vue {
     innerPrizes: Array<{ text: string, icon?: HTMLImageElement, angle: number }> = [];
     rotateAngle = 0; // 记录内圈转盘转动的总角度
     speed = SPEED; // 旋转一度需要多少秒
+    slowDown = 0; // 减速程度
     checkedIndex: number | null = null; // 表示抽中那个奖品
     running = false;
     slowDownTurns = 0; // 记录找到奖品后减速的圈数
@@ -59,19 +61,16 @@ export default class extends Vue {
             offsetX: this.radius,
             offsetY: this.radius,
         });
-        const outerBorderWidth = 3;
         layer.add(new Circle({
             x: this.radius,
             y: this.radius,
-            radius: this.radius - outerBorderWidth,
-            strokeWidth: outerBorderWidth,
+            radius: this.radius,
             rotation: 10,
-            stroke: '#E44808',
-            fill: '#FF4B00',
+            fill: '#f05828',
         }));
         // 外圈上的圆点
         const dotAngle = 360 / this.dotCount;
-        const offsetY = this.radius - this.borderWidth * 0.5 - this.dotRadius * 0.5;
+        const offsetY = this.radius - this.borderWidth * 0.5;
         for (let i = 0; i < this.dotCount; i++) {
             layer.add(new Circle({
                 x: this.radius,
@@ -80,6 +79,8 @@ export default class extends Vue {
                 rotation: dotAngle * i,
                 radius: this.dotRadius,
                 fill: this.dotColors[i % this.dotColors.length],
+                shadowBlur: 10,
+                shadowColor: this.dotColors[i % this.dotColors.length],
             }));
         }
         return layer;
@@ -136,59 +137,48 @@ export default class extends Vue {
     drawBtn() {
         const layer = new Layer();
         const outerRing = this.btnSize;
-        const innerRing = this.btnSize - 10;
+        const innerRing = this.btnSize - 5;
+        const btnSceneFunc = (context: Context, shape: Shape) => {
+            const radius: number = shape.getAttr('radius');
+            context.beginPath();
+            // 计算箭头y坐标
+            const y = this.radius - radius * 1.4;
+            context.moveTo(this.radius, y);
+            context.arc(this.radius, this.radius, radius, -Math.PI * 0.44, Math.PI + Math.PI * 0.44, false);
+            context.closePath();
+            context.fillShape(shape);
+        };
+
         layer.add(new Shape({
-            fill: '#B666E3',
-            sceneFunc: (context, shape) => {
-                context.beginPath();
-                const y = this.radius - outerRing - innerRing * 0.5;
-                const halfWidth = outerRing * 0.6;
-                context.moveTo(this.radius, y);
-                context.lineTo(this.radius - halfWidth, this.radius);
-                context.lineTo(this.radius + halfWidth, this.radius);
-                context.closePath();
-                context.fillShape(shape);
-            },
-        }));
-        layer.add(new Circle({
-            x: this.radius,
-            y: this.radius,
-            radius: outerRing,
-            stroke: '#BD76DB',
-            fillRadialGradientStartPoint: { x: 0, y: 0 },
-            fillRadialGradientStartRadius: 60,
-            fillRadialGradientEndPoint: { x: 0, y: 0 },
-            fillRadialGradientEndRadius: 0,
-            fillRadialGradientColorStops: [0, '#FEBF30', 1, '#EFD354'],
-        }));
-        layer.add(new Circle({
-            x: this.radius,
-            y: this.radius,
-            radius: innerRing,
-            stroke: '#601886',
-            fill: '#B666E3',
-        }));
+            sceneFunc: btnSceneFunc,
+            fill: '#fff',
+            shadowBlur: 10,
+            shadowColor: '#aaa',
+        }).setAttr('radius', outerRing));
+
+        layer.add(new Shape({
+            sceneFunc: btnSceneFunc,
+            fill: '#fa4d29',
+            shadowBlur: 5,
+            shadowColor: '#FF5229',
+        }).setAttr('radius', innerRing));
+
         const text = new Text({
-            text: '点击\n抽奖',
+            text: '立即\n抽奖',
             x: this.radius - innerRing,
             y: this.radius - innerRing,
             width: innerRing * 2,
             height: innerRing * 2,
             align: 'center',
             verticalAlign: 'middle',
-            fontSize: innerRing / 1.6,
+            fontSize: innerRing / 1.8,
             fontFamily: 'Microsoft YaHei',
-            fontStyle: 'bold',
-            fill: '#EFE940',
+            fill: '#fff',
         });
         text.on('mouseenter', () => {
-            text.fill('#fff');
-            layer.draw();
             this.container.style.cursor = 'pointer';
         });
         text.on('mouseout', () => {
-            text.fill('#EFE940');
-            layer.draw();
             this.container.style.cursor = 'default';
         });
         text.on('click touchend', this.onLuckDraw);
@@ -229,13 +219,14 @@ export default class extends Vue {
             angle = 360;
         }
         // 稳定转n圈以上，并且选中奖品首次旋转到正上方时，开始慢慢减速，若外部一直没有调用check选择抽中奖品，那么将会一直转
-        if (turnsNum > 3 && this.checkedIndex != null && angle + this.innerPrizes[this.checkedIndex].angle == 360) {
+        if (turnsNum > 2 && this.checkedIndex != null && angle + this.innerPrizes[this.checkedIndex].angle == 360) {
             // 记录减速旋转的圈数
             this.slowDownTurns++;
         }
         // 开始减速
         if (this.slowDownTurns > 0) {
-            this.speed += 0.0001 * this.slowDownTurns;
+            this.speed += 0.0001 * this.slowDown;
+            this.slowDown += 0.5;// 减速程度越来越大
         }
         new Tween({
             duration: this.fanneAngle * this.speed,
@@ -243,7 +234,7 @@ export default class extends Vue {
             rotation: this.rotateAngle,
             onFinish: () => {
                 // 当减速n圈后再次到达奖品位置处时，停止旋转，表示抽中该奖品
-                if (this.slowDownTurns == 5 && angle + this.innerPrizes[this.checkedIndex!].angle == 360) {
+                if (this.slowDownTurns == 4 && angle + this.innerPrizes[this.checkedIndex!].angle == 360) {
                     this.stop();
                     this.$emit('finish', this.checkedIndex);
                 } else {
@@ -275,6 +266,7 @@ export default class extends Vue {
         this.speed = SPEED;
         this.rotateAngle = 0;
         this.slowDownTurns = 0;
+        this.slowDown = 0;
         this.checkedIndex = null;
         this.running = true;
         this.handleInnerRingAnimation();

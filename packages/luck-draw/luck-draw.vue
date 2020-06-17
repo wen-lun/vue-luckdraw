@@ -1,11 +1,5 @@
 <template>
-    <div ref="container" class="luck-draw" />
+    <div ref="container" class="luck-draw" style="display:inline-block" />
 </template>
 
 <script lang='ts' src='./luck-draw.ts'></script>
-
-<style lang="scss" scoped>
-.luck-draw{
-    display: inline-block;
-}
-</style>
