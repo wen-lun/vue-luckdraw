@@ -29,11 +29,11 @@ export default {
     methods: {
         // 点击了开始抽奖
         onStart() {
-            // 模拟1s后请求到中奖奖品
+            // 模拟200ms后请求到中奖奖品
             setTimeout(() => {
             // 调用check方法，选中一个奖品索引
                 this.$refs.luckDraw.check(2);
-            }, 1000);
+            }, 200);
         },
         // 抽中奖品，并且停止转盘后调用
         onFinish(index) {
