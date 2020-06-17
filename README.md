@@ -1,5 +1,5 @@
 # 效果图
-<img src="demo/demo1.png" width="260"  /><img src="demo/demo2.gif" width="260"  />
+<img src="https://raw.githubusercontent.com/destiny-wenlun/vue-luckdraw/master/demo/demo1.png" width="260"  /><img src="https://raw.githubusercontent.com/destiny-wenlun/vue-luckdraw/master/demo/demo2.gif" width="260"  />
 
 > 说明：这是基于vue开发的转盘抽奖组件。
 
