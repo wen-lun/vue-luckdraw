@@ -45,64 +45,44 @@ export default {
 </template>
 
 <script>
-    export default {
-        data() {
-            return {
-                prize: null,
-                prizes: [{
-                        text: '100元', // 奖品名称
-                        icon: '/img/icon.png', // 图标，如果没有则不显示
-                    },
-                    {
-                        text: '10元',
-                        icon: '/img/icon.png'
-                    },
-                    {
-                        text: '1000元',
-                        icon: '/img/icon.png'
-                    },
-                    {
-                        text: '2元',
-                        icon: '/img/icon.png'
-                    },
-                    {
-                        text: '1元',
-                        icon: '/img/icon.png'
-                    },
-                    {
-                        text: '0.5元',
-                        icon: '/img/icon.png'
-                    },
-                    {
-                        text: '0.5元',
-                        icon: '/img/icon.png'
-                    },
-                    {
-                        text: '0.5元',
-                        icon: '/img/icon.png'
-                    },
-                ],
-            };
+export default {
+    data() {
+        return {
+            prize: null,
+            prizes: [
+                {
+                    text: '100元', // 奖品名称
+                    icon: '/img/icon.png', // 图标，如果没有则不显示
+                },
+                { text: '10元', icon: '/img/icon.png' },
+                { text: '1000元', icon: '/img/icon.png' },
+                { text: '2元', icon: '/img/icon.png' },
+                { text: '1元', icon: '/img/icon.png' },
+                { text: '0.5元', icon: '/img/icon.png' },
+                { text: '0.5元', icon: '/img/icon.png' },
+                { text: '0.5元', icon: '/img/icon.png' },
+            ],
+        };
+    },
+    methods: {
+        // 点击了开始抽奖
+        onStart() {
+            // 模拟200ms后请求到中奖奖品
+            setTimeout(() => {
+            // 调用check方法，选中一个奖品索引
+                this.$refs.luckDraw.check(2);
+            }, 200);
         },
-        methods: {
-            // 点击了开始抽奖
-            onStart() {
-                // 模拟1s后请求到中奖奖品
-                setTimeout(() => {
-                    // 调用check方法，选中一个奖品索引
-                    this.$refs.luckDraw.check(2);
-                }, 1000);
-            },
-            // 抽中奖品，并且停止转盘后调用
-            onFinish(index) {
-                this.prize = this.prizes[index];
-            },
-            onStopClick() {
-                // 主动调用stop方法停止转盘转动，在请求中奖奖品的接口出异常时调用
-                this.$refs.luckDraw.stop();
-            },
+        // 抽中奖品，并且停止转盘后调用
+        onFinish(index) {
+            this.prize = this.prizes[index];
         },
-    };
+        onStopClick() {
+            // 主动调用stop方法停止转盘转动，在请求中奖奖品的接口出异常时调用
+            this.$refs.luckDraw.stop();
+        },
+    },
+};
 </script>
 ```
 
@@ -116,16 +96,16 @@ export default {
 |iconWidth|icon：奖品图标宽度|Number|25|
 |borderWidth|转盘外圈与内圈直接的圆环宽度|Number|22|
 |dotCount|转盘外圈上的圆点个数|Number|24|
-|dotRadius|转盘外圈上的圆点半径|Number|5|
+|dotRadius|转盘外圈上的圆点半径|Number|4|
 |dotColors|转盘外圈上的圆点颜色，是一个颜色字符串数组|Array|['#FEE200', '#FFF']|
-|fanneColors|转盘内圈奖品扇形背景颜色，是一个颜色字符串数组|Array|['#FFE62A', '#FECE00']|
-|btnSize|“点击抽奖”按钮大小|Number|40|
+|fanneColors|转盘内圈奖品扇形背景颜色，是一个颜色字符串数组|Array|['#ffd428', '#fff68b']|
+|btnSize|“立即抽奖”按钮大小|Number|40|
 
 # 4. 事件
 
 |事件名称|参数|说明|
 |:-|:-|:-|
-|start|-|点击“点击抽奖”按钮时触发|
+|start|-|点击“立即抽奖”按钮时触发|
 |finish|index|抽中奖品，并停止转盘转动时触发，会回调一个index参数，该参数表示抽中的奖品索引|
 
 # 5. 方法
@@ -140,7 +120,7 @@ export default {
 export default {
     mounted() {
         let luckDraw = this.$refs.luckDraw;
-        // 当用户点击“点击抽奖”按钮时，若请求“抽中奖品的索引”的接口出现异常时，可以调用stop方法停止转盘转动
+        // 当用户点击“立即抽奖”按钮时，若请求“抽中奖品的索引”的接口出现异常时，可以调用stop方法停止转盘转动
         luckDraw.stop();
     }
 }
