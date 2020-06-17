@@ -1,13 +1,14 @@
 {
   "name": "v-luck-draw",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "基于Vue的转盘抽奖组件",
   "author": "wenlun",
   "main": "lib/luckdraw.umd.min.js",
   "typings": "types/index.d.ts",
   "files": [
     "packages",
-    "lib"
+    "lib",
+    "types"
   ],
   "scripts": {
     "start": "vue-cli-service serve",
