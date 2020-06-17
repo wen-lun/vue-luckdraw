@@ -1,0 +1,64 @@
+{
+  "name": "vue-luckdraw",
+  "version": "0.1.0",
+  "description": "基于Vue的转盘抽奖组件",
+  "author": "wenlun",
+  "main": "lib/luckdraw.umd.min.js",
+  "files": [
+    "packages",
+    "lib"
+  ],
+  "scripts": {
+    "start": "vue-cli-service serve",
+    "lib": "vue-cli-service build --target lib --name luckdraw --dest lib packages/index.ts",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "core-js": "^3.6.5",
+    "konva": "^6.0.0",
+    "vue": "^2.6.11",
+    "vue-class-component": "^7.2.3",
+    "vue-property-decorator": "^8.5.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.18.0",
+    "@typescript-eslint/parser": "^2.18.0",
+    "@vue/cli-plugin-babel": "^4.4.0",
+    "@vue/cli-plugin-eslint": "^4.4.0",
+    "@vue/cli-plugin-typescript": "^4.4.4",
+    "@vue/cli-service": "^4.4.0",
+    "@vue/eslint-config-standard": "^5.1.2",
+    "@vue/eslint-config-typescript": "^5.0.2",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "eslint-plugin-vue": "^6.2.2",
+    "sass": "^1.26.5",
+    "sass-loader": "^8.0.2",
+    "typescript": "^3.9.5",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "keywords": [
+    "vue",
+    "vue.js",
+    "canvas",
+    "luck draw",
+    "luck-draw",
+    "luckdraw",
+    "vue-luck-draw",
+    "v-luck-draw",
+    "抽奖",
+    "转盘抽奖"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/destiny-wenlun/vue-luckdraw.git"
+  },
+  "bugs": {
+    "url": "https://github.com/destiny-wenlun/vue-luckdraw/issues"
+  },
+  "homepage": "https://github.com/destiny-wenlun/vue-luckdraw#readme"
+}
