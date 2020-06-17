@@ -8,26 +8,22 @@
 * 安装
 
 ``` javascript
-npm install vue - luckdraw
+npm install v-luck-draw
 ```
 
 * 使用
 
 ``` javascript
 //方法1
-import LuckDraw from 'vue-luckdraw'
+import LuckDraw from 'v-luck-draw'
 Vue.use(LuckDraw);
 
 //方法2
-import {
-    LuckDraw
-} from 'vue-luckdraw'
+import { LuckDraw } from 'v-luck-draw'
 Vue.component("LuckDraw", LuckDraw);
 
 //方法3 假设是test.vue文件 <script>标签内使用局部注册LuckDraw组件
-import {
-    LuckDraw
-} from 'vue-luckdraw'
+import { LuckDraw } from 'v-luck-draw'
 export default {
     components: {
         LuckDraw
@@ -49,44 +45,64 @@ export default {
 </template>
 
 <script>
-export default {
-    data() {
-        return {
-            prize: null,
-            prizes: [
-                {
-                    text: '100元', // 奖品名称
-                    icon: '/img/icon.png', // 图标，如果没有则不显示
-                },
-                { text: '10元', icon: '/img/icon.png' },
-                { text: '1000元', icon: '/img/icon.png' },
-                { text: '2元', icon: '/img/icon.png' },
-                { text: '1元', icon: '/img/icon.png' },
-                { text: '0.5元', icon: '/img/icon.png' },
-                { text: '0.5元', icon: '/img/icon.png' },
-                { text: '0.5元', icon: '/img/icon.png' },
-            ],
-        };
-    },
-    methods: {
-        // 点击了开始抽奖
-        onStart() {
-            // 模拟1s后请求到中奖奖品
-            setTimeout(() => {
-            // 调用check方法，选中一个奖品索引
-                this.$refs.luckDraw.check(2);
-            }, 1000);
+    export default {
+        data() {
+            return {
+                prize: null,
+                prizes: [{
+                        text: '100元', // 奖品名称
+                        icon: '/img/icon.png', // 图标，如果没有则不显示
+                    },
+                    {
+                        text: '10元',
+                        icon: '/img/icon.png'
+                    },
+                    {
+                        text: '1000元',
+                        icon: '/img/icon.png'
+                    },
+                    {
+                        text: '2元',
+                        icon: '/img/icon.png'
+                    },
+                    {
+                        text: '1元',
+                        icon: '/img/icon.png'
+                    },
+                    {
+                        text: '0.5元',
+                        icon: '/img/icon.png'
+                    },
+                    {
+                        text: '0.5元',
+                        icon: '/img/icon.png'
+                    },
+                    {
+                        text: '0.5元',
+                        icon: '/img/icon.png'
+                    },
+                ],
+            };
         },
-        // 抽中奖品，并且停止转盘后调用
-        onFinish(index) {
-            this.prize = this.prizes[index];
+        methods: {
+            // 点击了开始抽奖
+            onStart() {
+                // 模拟1s后请求到中奖奖品
+                setTimeout(() => {
+                    // 调用check方法，选中一个奖品索引
+                    this.$refs.luckDraw.check(2);
+                }, 1000);
+            },
+            // 抽中奖品，并且停止转盘后调用
+            onFinish(index) {
+                this.prize = this.prizes[index];
+            },
+            onStopClick() {
+                // 主动调用stop方法停止转盘转动，在请求中奖奖品的接口出异常时调用
+                this.$refs.luckDraw.stop();
+            },
         },
-        onStopClick() {
-            // 主动调用stop方法停止转盘转动，在请求中奖奖品的接口出异常时调用
-            this.$refs.luckDraw.stop();
-        },
-    },
-};
+    };
 </script>
 ```
 
