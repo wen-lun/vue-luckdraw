@@ -12,6 +12,7 @@
   ],
   "scripts": {
     "start": "vue-cli-service serve",
+    "build": "vue-cli-service build --dest vue-luckdraw",
     "lib": "vue-cli-service build --target lib --name luckdraw --dest lib packages/index.ts",
     "lint": "vue-cli-service lint"
   },
