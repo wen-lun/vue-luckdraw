@@ -1,8 +1,16 @@
 <template>
     <div class="demo">
         <luck-draw ref="luckDraw" :prizes="prizes" @start="onStart" @finish="onFinish" />
-        <div style="padding:10px;">抽中奖品：{{ prize&&prize.text||"尚未抽奖" }}</div>
-        <button @click="onStopClick">停止抽奖</button>
+        <div class="operation">
+            <div class="item">
+                选择奖品：
+                <select v-model="checkIndex">
+                    <option v-for="({text},i) in prizes" :key="i" :value="i">{{ text }}</option>
+                </select>
+                <button @click="onStopClick">停止抽奖</button>
+            </div>
+            <div class="item">抽中奖品：{{ prize&&prize.text||"尚未抽奖" }}</div>
+        </div>
     </div>
 </template>
 
@@ -10,6 +18,7 @@
 export default {
     data() {
         return {
+            checkIndex: 0,
             prize: null,
             prizes: [
                 {
@@ -19,9 +28,9 @@ export default {
                 { text: '10元', icon: '/img/icon.png' },
                 { text: '1000元', icon: '/img/icon.png' },
                 { text: '2元', icon: '/img/icon.png' },
-                { text: '1元', icon: '/img/icon.png' },
-                { text: '0.5元', icon: '/img/icon.png' },
-                { text: '0.5元', icon: '/img/icon.png' },
+                { text: '1元' },
+                { text: '0.2元', icon: '/img/icon.png' },
+                { text: '0.3元', icon: '/img/icon.png' },
                 { text: '0.5元', icon: '/img/icon.png' },
             ],
         };
@@ -32,7 +41,7 @@ export default {
             // 模拟200ms后请求到中奖奖品
             setTimeout(() => {
             // 调用check方法，选中一个奖品索引
-                this.$refs.luckDraw.check(2);
+                this.$refs.luckDraw.check(this.checkIndex);
             }, 200);
         },
         // 抽中奖品，并且停止转盘后调用
@@ -49,6 +58,18 @@ export default {
 
 <style lang="scss" scoped>
 .demo {
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    .operation {
+        padding-left: 40px;
+        .item {
+            padding: 10px 0;
+            display: flex;
+            align-items: center;
+            button {
+                margin-left: 15px;
+            }
+        }
+    }
 }
 </style>
